@@ -15,7 +15,7 @@ def find_split(data):
             split_points.append((unique_signal[j]+unique_signal[j+1])/2)
         split_points_list.append(split_points)
 
-    # Split data by split points
+    # Split data by split points and calculate entropy
     for feature in range(len(split_points_list)):
         for i in range(len(split_points_list[feature])):
             data_l, data_r = split_data(data, feature + 1, split_points_list[feature][i])
