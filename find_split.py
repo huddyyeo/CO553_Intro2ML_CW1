@@ -3,7 +3,7 @@ import numpy as np
 
 def find_split(data):
 
-    ret = {"feature": None, "split_point": None, "entropy": 0}
+    ret = {"router": None, "split_point": None, "entropy": get_entropy(data[:, 7])}
 
     # Create array of unique datapoints
     split_points_list = list()
@@ -20,12 +20,12 @@ def find_split(data):
         for i in range(len(split_points_list[feature])):
             data_l, data_r = split_data(data, feature + 1, split_points_list[feature][i])
             entropy = get_entropy(data_l[:, 7], data_r[:, 7])
-            if entropy > ret["entropy"]:
+            if entropy < ret["entropy"]:
                 ret["entropy"] = entropy
-                ret["feature"] = feature + 1
+                ret["router"] = feature + 1
                 ret["split_point"] = split_points_list[feature][i]
 
-    return ret["feature"], ret["split_point"], split_data(data, ret["feature"], ret["split_point"])
+    return ret["router"], ret["split_point"], split_data(data, ret["router"], ret["split_point"])
 
 
 def split_data(data, feature, split_point):
