@@ -28,7 +28,7 @@ def find_split(data):
                 ret["feature"] = feature + 1
                 ret["split_point"] = split_points_list[feature][i]
 
-    return ret["feature"], ret["split_point"]
+    return ret["feature"], ret["split_point"], split_data(data, ret["feature"], ret["split_point"])
 
 
 def split_data(data, feature, split_point):
