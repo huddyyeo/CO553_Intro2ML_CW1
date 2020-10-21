@@ -3,6 +3,9 @@ import numpy as np
 
 def find_split(data):
 
+    if len(np.unique(data[:,7])) == 1:
+        return "Something"
+    
     ret = {"feature": None, "split_point": None, "entropy": 0}
 
     # Create array of unique datapoints
@@ -51,6 +54,3 @@ def get_entropy(*labels):
         entropy = np.sum([-(i/n) * np.log2(i/n) for i in counts]) #subset entropy calcuation
         entropies.append((entropy, n))
     return np.sum([(n/total) * ent for n, ent in iter(entropies)])
-
-
-find_split(data)
