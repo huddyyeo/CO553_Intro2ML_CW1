@@ -3,9 +3,6 @@ import numpy as np
 
 def find_split(data):
 
-    if len(np.unique(data[:,7])) == 1:
-        return "Something"
-    
     ret = {"feature": None, "split_point": None, "entropy": 0}
 
     # Create array of unique datapoints
