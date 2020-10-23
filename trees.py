@@ -11,7 +11,6 @@ class binarySearchTree:
         self.label = label
         self.split_value = None
         self.split_router = None
-        #self.train_samples=None
         
         if len(np.unique(data[:,-1]))==1: #assuming last column is for labels
             self.label = data[0,-1]
@@ -31,6 +30,7 @@ class binarySearchTree:
             self.right_child=binarySearchTree(r_data, self.depth)
         
     def get_max_depth(self):
+        #search each branch recursively and get max depth
             max_depth=[self.depth]
             if self.left_child:
                 max_depth.append(self.left_child.get_max_depth())
@@ -56,12 +56,3 @@ class binarySearchTree:
         
         else:
             return self.predict_one(data).flatten()
-        
-        
-    def visualise(self):
-        #visualisation
-        pass
-    
-    def evaluate(self):
-        #evaluation
-        pass
