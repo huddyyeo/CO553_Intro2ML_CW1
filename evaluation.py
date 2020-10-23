@@ -21,6 +21,10 @@ def confusion_matrix(y_true, y_predicted,plot=False):
         plt.ylabel("true")
         """plt.xlim(1,4) !!!! make room plots form 1 to 4
         plt.ylim(1,4)"""
+        for i in range(N):
+            for j in range(N):
+                text = plt.text(i,j, confusion_matrix[i][j],
+                               ha="center", va="center", color="w")
         plt.show() 
     return confusion_matrix
 
