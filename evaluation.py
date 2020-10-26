@@ -32,8 +32,6 @@ def confusion_matrix(y_true, y_predicted,plot=False):
 
 def avg_recall_precision(confusion_matrix):
     N = len(confusion_matrix)
-    avg_true_pos = 0
-    sum_false_neg = 0
 
     recall = {}
     precision = {}
