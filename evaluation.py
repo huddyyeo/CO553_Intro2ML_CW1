@@ -48,7 +48,7 @@ def avg_recall_precision(confusion_matrix):
 
 avg_recall_precision(confusion_matrix(y_true, y_predicted))
 
-def f1_score(precision, recall):
+def f1_score(recall, precision):
     return 2/((1/recall)+(1/precision))
 
 def avg_classification_rate(confusion_matrix):
