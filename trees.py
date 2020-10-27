@@ -1,10 +1,11 @@
 import numpy as np
 import pandas as pd
 import find_split as fs
+import evaluation as ev
 
 
 class binarySearchTree:
-    def __init__(self, data, depth=0, label = None):
+    def __init__(self, data, depth=-1, label = None):
         self.left_child = None
         self.right_child = None
         self.depth = depth+1
