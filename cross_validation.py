@@ -34,3 +34,34 @@ def grow_binary_trees(data, stratified=False, pruning=None):
         results[i]['pred_y'] = tree.predict(test_data)
 
     return results
+
+
+def get_confusion_matrix(y_true, y_pred):
+    ret_matrix = np.zeros((4, 4))
+    for x, y in zip(y_pred, y_true):
+        ret_matrix[x - 1][y - 1] += 1
+
+    return ret_matrix
+
+
+def get_recalls_precisions(y_true, y_pred):
+    # precision = diagonal / row
+    # recall = diagonal / column
+    conf_matrix = get_confusion_matrix(y_true, y_pred)
+
+    precisions = np.diagonal(conf_matrix) / np.sum(conf_matrix, axis=1)
+    recalls = np.diagonal(conf_matrix) / np.sum(conf_matrix, axis=0)
+
+    return precisions, recalls
+
+
+def get_f1_scores(y_true, y_pred):
+    precisions, recalls = get_recalls_precisions(y_true, y_pred)
+
+    return 2 * (precisions * recalls) / (precisions + recalls)
+
+
+def get_accuracy(y_true, y_pred):
+    conf_matrix = get_confusion_matrix(y_true, y_pred)
+
+    return np.sum(np.diagonal(conf_matrix)) / np.sum(conf_matrix)
