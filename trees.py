@@ -44,19 +44,7 @@ class binarySearchTree:
             if self.right_child:
                 max_depth.append(self.right_child.get_max_depth())                 
             return max(max_depth)
-        
-    def predict_one(self,data):
-        if self.prune:
-            if self.prune>0:
-                return np.array([self.prune_label])
-        if self.label:
-            return np.array([int(self.label)])
-        else:
-            if data[self.split_router-1]<=self.split_value:
-                return self.left_child.predict_one(data)
 
-            else:
-                return self.right_child.predict_one(data)  
             
     def prune_1_node(self,current_path=['parent']):
         if self.label:
@@ -72,8 +60,9 @@ class binarySearchTree:
             #else this means we have already pruned or chosen not to prune this branch, return True
             return True
         
+        #if either child is a leaf or already pruned,
         if self.left_child.label and self.right_child.label:
-            print('set 1 to prune at path',current_path)
+            #print('set 1 to prune at path',current_path)
             self.prune=1            
             #set this node for pruning
             return False
@@ -114,6 +103,9 @@ class binarySearchTree:
                 return
             else:
                 self.prune=2
+                self.label=self.prune_label
+                self.left_child=None
+                self.right_child=None
                 return
         self.left_child.set_prune_status(pruned)
         self.right_child.set_prune_status(pruned)
@@ -145,6 +137,18 @@ class binarySearchTree:
                     print('did not prune')
             
         
+    def predict_one(self,data):
+        if self.prune:
+            if self.prune>0:
+                return np.array([self.prune_label])
+        if self.label:
+            return np.array([int(self.label)])
+        else:
+            if data[self.split_router-1]<=self.split_value:
+                return self.left_child.predict_one(data)
+
+            else:
+                return self.right_child.predict_one(data)          
             
     def predict(self,data):
         
