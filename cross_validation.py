@@ -3,35 +3,54 @@ import evaluation
 from trees import binarySearchTree
 
 
-def grow_binary_trees(data, stratified=False, pruning=None):
+def grow_binary_trees(data, stratified=False, pruning=False):
     '''
     Splits the data set into 10 folds and uses each fold as a testing set once.
     Calculates metrics for each fold to get standard errors.
     Data split - stratified or fully random. #TODO
-    ----------
-    :return: dict of dicts, {indices, true_labels, predicted_labels} for each fold.
     '''
 
     # Create 10 Folds: Group indices into 10 folds
-    if stratified:
-        pass
-    else:
-        fold_indices = np.random.permutation(np.arange(data.shape[0])).reshape(10, -1)
+    np.random.shuffle(data)
+    data = data.reshape((10, -1, 8))
 
     # Training folds
-    results = {'strtified': stratified}
+    results = {}
 
-    for i, gen in enumerate(fold_indices):
-        results[i] = dict()
-        train_mask = np.delete(np.arange(data.shape[0]), gen)
-        test_data, test_labels = data[gen][:, :-1], data[gen][:, -1]
-        train_data = data[train_mask]
+    if pruning:
+        for i, fold in enumerate(data):
+            results[i] = dict()
 
-        tree = binarySearchTree(train_data)
+            test_data = fold
+            train_val_data = np.delete(data, i, axis=0)
+            print(train_val_data.shape)
+            np.random.shuffle(train_val_data)
+            pruning_data, train_data = train_val_data[0], np.vstack(train_val_data[1:])
 
-        results[i]['index'] = gen
-        results[i]['true_y'] = test_labels
-        results[i]['pred_y'] = tree.predict(test_data)
+            print(test_data.shape, train_data.shape, pruning_data.shape)
+
+            tree = binarySearchTree(train_data)
+
+            results[i]['y_true'] = test_data[:, -1].astype(int)
+            results[i]['y_pred_unpruned'] = tree.predict(test_data)
+
+            tree.prune_tree(pruning_data)
+
+            results[i]['y_pred_pruned'] = tree.predict(test_data)
+
+    else:
+
+        for i, fold_ids in enumerate(fold_indices):
+            results[i] = dict()
+            train_ids = np.delete(np.arange(data.shape[0]), fold_ids)
+            test_data, test_labels = data[fold_ids][:, :-1], data[fold_ids][:, -1]
+            train_data = data[train_ids]
+
+            tree = binarySearchTree(train_data)
+
+            results[i]['index'] = fold_ids
+            results[i]['y_true'] = test_labels.astype(int)
+            results[i]['y_pred'] = tree.predict(test_data)
 
     return results
 
