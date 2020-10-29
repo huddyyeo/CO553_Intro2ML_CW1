@@ -24,7 +24,6 @@ def grow_binary_trees(data, stratified=False, pruning=False):
             test_data = fold
             train_val_data = np.delete(data, i, axis=0)
             print(train_val_data.shape)
-            np.random.shuffle(train_val_data)
             pruning_data, train_data = train_val_data[0], np.vstack(train_val_data[1:])
 
             print(test_data.shape, train_data.shape, pruning_data.shape)
