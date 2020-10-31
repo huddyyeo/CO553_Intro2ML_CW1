@@ -5,7 +5,7 @@ import evaluation as ev
 
 
 class binarySearchTree:
-    def __init__(self, data, depth=-1, label = None):
+    def __init__(self, data, depth=-1, label = None,limit=None):
         self.left_child = None
         self.right_child = None
         self.depth = depth+1
@@ -16,11 +16,18 @@ class binarySearchTree:
         #default value none, 0 for choosing not to prune, 1 for testing during pruning, 2 for permanently pruned
         self.prune=None 
         
+        #if we have passed the limit, set this to be a leaf node
+        if limit is not None:
+            if self.depth>=limit:
+                self.label=np.argmax(np.bincount([int(i) for i in data[:,-1]]))
+                return
+        
         #set future prune value to most common label in data
         self.prune_label=np.argmax(np.bincount([int(i) for i in data[:,-1]]))
         
         if len(np.unique(data[:,-1]))==1: #assuming last column is for labels
             self.label = data[0,-1]
+        
         
         else:
             #not all samples have same label, do a split
@@ -33,8 +40,8 @@ class binarySearchTree:
             r_data=temp_data[1]
              
             #recursively search the tree, branching into 2 
-            self.left_child=binarySearchTree(l_data, self.depth)
-            self.right_child=binarySearchTree(r_data, self.depth)
+            self.left_child=binarySearchTree(l_data, self.depth,limit=limit)
+            self.right_child=binarySearchTree(r_data, self.depth,limit=limit)
         
     def get_max_depth(self):
         #search each branch recursively and get max depth
