@@ -4,28 +4,36 @@ import matplotlib.pyplot as plt
 y_true = [1,2,3,4,1,2,3,4]
 y_predicted = [1,1,3,4,1,2,2,4]
 
-def confusion_matrix(y_true, y_predicted,plot=False):
-    y_true=[int(i) for i in y_true]
-    y_predicted=[int(i) for i in y_predicted]
-    labels = np.unique(y_true)
-    N = len(labels)
 
-    confusion_matrix = [ [ 0 for i in range(N) ] for j in range(N) ] # 4 x 4 matrix
+def confusion_matrix(y_true, y_pred,plot=False):
+    confusion_matrix = np.zeros((4, 4))
+    if type(y_true[0])!= int:
+        y_true = [int(x) for x in y_true.tolist()]
+    if type(y_pred[0])!= int:
+        y_pred = [int(x) for x in train_pred.tolist()]
+    for x, y in zip(y_pred, y_true):
+        confusion_matrix[x - 1][y - 1] += 1
 
-    for i,room in enumerate(y_true):
-        confusion_matrix[room-1][y_predicted[i]-1] += 1
-    if plot==True:
-        
-        plt.matshow(confusion_matrix)
+
+    if plot:
+        fig, ax = plt.subplots(1,1)
+        plt.imshow(confusion_matrix)
         plt.xlabel("predicted")
         plt.ylabel("true")
-        """plt.xlim(1,4) !!!! make room plots form 1 to 4
-        plt.ylim(1,4)"""
-        for i in range(N):
-            for j in range(N):
-                text = plt.text(i,j, confusion_matrix[i][j],
+
+        label_list = ['1','2', '3', '4']
+
+        ax.set_xticks([0,1,2,3])
+        ax.set_yticks([0, 1, 2, 3])
+
+        ax.set_xticklabels(label_list)
+        ax.set_yticklabels(label_list)
+
+        for i in range(4):
+            for j in range(4):
+                text = ax.text(i,j, confusion_matrix[i][j],
                                ha="center", va="center", color="w")
-        plt.show() 
+        fig.show()
     return confusion_matrix
 
 
