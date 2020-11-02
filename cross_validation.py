@@ -86,6 +86,10 @@ def get_metrics(conf_matrix):
 
 
 def get_averages(results):
+    '''
+    Returns average metrics from ten folds + half of confidence interval width for each metric.
+    '''
+
     precisions = []
     recalls = []
     f1_scores = []
@@ -100,7 +104,11 @@ def get_averages(results):
         class_rates.append(c_r)
     return {
         'precision': np.mean(np.array(precisions), axis=0),
+        'precision_CI': np.std(np.array(precisions), ddof=1, axis=0) * 1.96 / np.sqrt(10),
         'recall': np.mean(np.array(recalls), axis=0),
+        'recall_CI': np.std(np.array(recalls), ddof=1, axis=0) * 1.96 / np.sqrt(10),
         'f1_score': np.mean(np.array(f1_scores), axis=0),
-        'avg_class_rate': np.mean(np.array(class_rates))
+        'f1_score_CI': np.std(np.array(f1_scores), ddof=1, axis=0) * 1.96 / np.sqrt(10),
+        'avg_class_rate': np.mean(np.array(class_rates)),
+        'avg_class_rate_CI': np.std(np.array(class_rates), ddof=1) * 1.96 / np.sqrt(10)
     }
