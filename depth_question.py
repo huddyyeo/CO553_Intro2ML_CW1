@@ -30,9 +30,6 @@ def get_values(data):
         y_true2 = [int(val.item()) for val in test[:, -1]]
         pruned_depths.append(depth2)
         pruned_accuracies.append(ev.get_accuracy(y_true2, y_pred2))
-
-    print(depths, accuracies)
-    print(pruned_depths, pruned_accuracies)
     return depths, accuracies, pruned_depths, pruned_accuracies
 
 def graph_depths(data):
@@ -51,11 +48,19 @@ def graph_depth_accuracy(data):
     plt.xlabel('tree depth')
     plt.legend()
     plt.show()
-
-noisy_data = np.loadtxt('noisy_dataset.txt')
-clean_data = np.loadtxt('clean_dataset.txt')
-noisy_data=noisy_data.copy()
-clean_data = clean_data.copy()
-
-#graph_depths(noisy_data)
-graph_depth_accuracy(clean_data)
+    
+def plot_both(data):
+    depths, accuracies, pruned_depths, pruned_accuracies = get_values(data)
+    plt.subplot(1,2,1)
+    plt.plot(np.arange(len(depths)), np.arange(len(depths)), alpha=0.2, color='blue')
+    plt.scatter(depths, pruned_depths)
+    plt.ylabel('Tree depths after pruning')
+    plt.xlabel('Tree depths before pruning')
+    plt.subplot(1,2,2)
+    plt.plot(depths, accuracies, color='b', label='Unpruned tree')
+    plt.plot(pruned_depths, pruned_accuracies, color='orange', label='Pruned tree')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Tree depth')
+    plt.legend()
+    plt.show(block=False)
+    return
