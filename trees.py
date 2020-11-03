@@ -1,6 +1,7 @@
 import numpy as np
 import find_split as fs
 import evaluation as ev
+import matplotlib.pyplot as plt
 
 
 class binarySearchTree:
@@ -156,3 +157,47 @@ class binarySearchTree:
             return np.array([self.predict_one(i) for i in data]).flatten()
         else:
             return self.predict_one(data).flatten()
+
+    def get_paths(self, path=['root'], objects=[]):
+        if self.label != None:
+            objects.append((path, f'Room {int(self.label)}'))
+        else:
+            objects.append((path, f'Router {self.split_router}\nX = {self.split_value}'))
+            l_path = path + ['l']
+            r_path = path + ['r']
+            self.left_child.get_paths(l_path, objects)
+            self.right_child.get_paths(r_path, objects)
+        return objects
+
+    def visualise_tree(self):
+        paths = self.get_paths()
+        bbox_node = {'boxstyle': "round", 'ec': 'black', 'fc': 'lightgrey'}
+        bbox_label = {'boxstyle': "round", 'ec': 'black', 'fc': 'lightblue'}
+        fig, ax = plt.subplots(figsize=(15, 8))
+        ax.set_xlim(0, 1)
+        ax.set_ylim(0, 1)
+        for pair in paths:
+            path, label = pair
+            n = len(path)
+            if n > 4:
+                continue
+            x = 0.5
+            y = 0.90
+            for i, side in enumerate(path):
+
+                if side == 'l':
+                    x -= 0.25 / i
+                if side == 'r':
+                    x += 0.25 / i
+                if side != 'root':
+                    y -= 0.25
+
+            if label[2] != 'o':
+                ax.text(x, y, s=label, ha='center', fontsize=16 - (1.5 * len(path)), bbox=bbox_node)
+                n = len(path)
+                ax.arrow(x, y, -0.25 / n, -0.25)
+                ax.arrow(x, y, 0.25 / n, -0.25)
+            else:
+                ax.text(x, y, s=label, ha='center', fontsize=16 - (1.5 * len(path)), bbox=bbox_label)
+        plt.axis('off')
+        plt.show()
