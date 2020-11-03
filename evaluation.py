@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 y_true = [1,2,3,4,1,2,3,4]
-y_predicted = [1,1,3,4,1,2,2,4]
+y_pred = [1,1,3,4,1,2,2,4]
 
 
 def confusion_matrix(y_true, y_pred,plot=False,title=None):
@@ -15,7 +15,7 @@ def confusion_matrix(y_true, y_pred,plot=False,title=None):
         confusion_matrix[x - 1][y - 1] += 1
 
 
-    if plot:
+    if plot==True:
         fig, ax = plt.subplots(1,1)
         plt.imshow(confusion_matrix)
         plt.xlabel("predicted")
@@ -34,67 +34,52 @@ def confusion_matrix(y_true, y_pred,plot=False,title=None):
             for j in range(4):
                 text = ax.text(i,j, int(confusion_matrix[i][j]),
                                ha="center", va="center", color="w")
-        fig.show()
+        plt.show()
     return confusion_matrix
 
-
-
-def avg_recall_precision(confusion_matrix):
+"""def avg_recall_precision(confusion_matrix):
     N = len(confusion_matrix)
 
     recall = {}
     precision = {}
-
+    for
     for room in range(N):
         true_pos = confusion_matrix[room][room]
         recall[room] = true_pos / sum(confusion_matrix[:][room])
         precision[room] = true_pos / sum(confusion_matrix[room][:])
     return sum(recall.values())/N, sum(precision.values()) / N
-
-def f1_score(recall, precision):
-    return 2/((1/recall)+(1/precision))
-
-def avg_classification_rate(confusion_matrix):
-    true_pred = 0
-    for i in range(len(confusion_matrix)):
-        true_pred += confusion_matrix[i][i]
-    return true_pred/np.sum(confusion_matrix)
-
-def get_confusion_matrix(y_true, y_pred):
-    ret_matrix = np.zeros((4, 4))
-    for x, y in zip(y_pred, y_true):
-        ret_matrix[x - 1][y - 1] += 1
-
-    return ret_matrix
-
-
-def get_recalls_precisions(y_true, y_pred):
-    # precision = diagonal / row
-    # recall = diagonal / column
-    conf_matrix = get_confusion_matrix(y_true, y_pred)
+"""
+def get_recalls_precisions(conf_matrix):
 
     precisions = np.diagonal(conf_matrix) / np.sum(conf_matrix, axis=1)
     recalls = np.diagonal(conf_matrix) / np.sum(conf_matrix, axis=0)
 
     return precisions, recalls
 
+"""def avg_classification_rate(confusion_matrix):
+    true_pred = 0
+    for i in range(len(confusion_matrix)):
+        true_pred += confusion_matrix[i][i]
+    return true_pred/np.sum(confusion_matrix)"""
 
-def get_f1_scores(y_true, y_pred):
-    precisions, recalls = get_recalls_precisions(y_true, y_pred)
+def get_f1_scores(conf_matrix):
+    precisions, recalls = get_recalls_precisions(conf_matrix)
 
     return 2 * (precisions * recalls) / (precisions + recalls)
 
 
 def get_accuracy(y_true, y_pred):
-    conf_matrix = get_confusion_matrix(y_true, y_pred)
+    conf_matrix = confusion_matrix(y_true, y_pred)
 
     return np.sum(np.diagonal(conf_matrix)) / np.sum(conf_matrix)
 
+
 def get_metrics(y_true, y_pred, printout=False):
     y_pred=[int(i) for i in y_pred]
-    y_true=[int(i) for i in y_true]    
-    precision, recall = get_recalls_precisions(y_true, y_pred)
-    f1 = get_f1_scores(y_true, y_pred)
+    y_true=[int(i) for i in y_true]
+    conf_matrix = confusion_matrix(y_true, y_pred)
+    precision, recall = get_recalls_precisions(conf_matrix)
+    f1 = get_f1_scores(conf_matrix)
     accuracy = get_accuracy(y_true, y_pred)
 
     if printout:
@@ -105,3 +90,5 @@ def get_metrics(y_true, y_pred, printout=False):
         print('Avg Accuracy:', accuracy)
 
     return precision, recall, f1, accuracy
+
+
