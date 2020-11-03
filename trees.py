@@ -114,7 +114,7 @@ class binarySearchTree:
     def prune_tree(self, data, print_path=False):
         end = False
 
-        val_error = self.get_f1(data)
+        val_error = np.mean(self.get_f1(data))
         while (not end):
             # find node to prune
             end = self.prune_1_node()
