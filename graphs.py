@@ -10,6 +10,7 @@ for i in range(7):
     x4 = data[data[:, -1] == 4][:, i]
     bins_list = np.arange(min(data[:, i]), max(data[:, i]), step=1)
     ax[i, 0].hist([x1, x2, x3, x4], bins_list, stacked=True, density=True, rwidth=0.8)
+    # orientation="horizontal"
 data = np.loadtxt('noisy_dataset.txt')
 for i in range(7):
     x1 = data[data[:, -1] == 1][:, i]
@@ -18,4 +19,6 @@ for i in range(7):
     x4 = data[data[:, -1] == 4][:, i]
     bins_list = np.arange(min(data[:, i]), max(data[:, i]), step=1)
     ax[i, 1].hist([x1, x2, x3, x4], bins_list, stacked=True, density=True, rwidth=0.8)
+
+fig.legend(['Room 1', 'Room 2', 'Room 3', 'Room 4'], loc='upper right', fontsize='x-small')
 fig
