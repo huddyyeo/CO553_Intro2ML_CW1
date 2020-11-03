@@ -44,13 +44,13 @@ if __name__ == "__main__":
             test=data[int(len(data)*split):]
              
             model=binarySearchTree(train,limit=limit)
-            print('Max depth of tree is',model.get_max_depth())        
-            y_pred=model.predict(test[:,:-1])
-            cm=ev.confusion_matrix(test[:,-1],y_pred,plot=True)
+            print('Max depth of tree is',model.get_max_depth())   
             
-            
-            ev.get_metrics(test[:,-1], y_pred, printout=True)            
-            r=ev.avg_recall_precision(cm)        
+            y_pred=model.predict(test[:,:-1])          
+            ev.get_metrics(test[:,-1], y_pred, printout=True)             
+            print('To continue, you may need to close the plot window first')
+            ev.confusion_matrix(test[:,-1],y_pred,plot=True)
+           
             print('\n')
             input('To restart, hit enter\n')
             
@@ -79,20 +79,23 @@ if __name__ == "__main__":
             model=binarySearchTree(train,limit=limit)
             print('Max depth of tree before pruning:',model.get_max_depth())
             y_pred=model.predict(test[:,:-1])
-            #evaluate
-            cm=ev.confusion_matrix(test[:,-1],y_pred,plot=True,title='Unpruned')
-            ev.get_metrics(test[:,-1], y_pred, printout=True)            
-            r=ev.avg_recall_precision(cm)       
+            #evaluate            
+            ev.get_metrics(test[:,-1], y_pred, printout=True)                
+            print('To continue, you may need to close the plot window first')            
+            ev.confusion_matrix(test[:,-1],y_pred,plot=True,title='Unpruned')
+        
             
             print('\nPruning...\n')
             
             model.prune_tree(validation)
             print('Max depth of tree after pruning:',model.get_max_depth())            
             y_pred=model.predict(test[:,:-1])
-            #evaluate
-            cm=ev.confusion_matrix(test[:,-1],y_pred,plot=True,title='Pruned')
 
-            ev.get_metrics(test[:,-1], y_pred, printout=True)
+            #evaluate
+            ev.get_metrics(test[:,-1], y_pred, printout=True)            
+            print('To continue, you may need to close the plot window first')            
+            ev.confusion_matrix(test[:,-1],y_pred,plot=True,title='Pruned')
+
             print('\n')
             input('To restart, hit enter\n')
             
@@ -125,6 +128,7 @@ if __name__ == "__main__":
         
         if model=='4':
             print('Training...\n')
+            print('To continue later, you may need to close the plot window first')
             dp.plot_both(data)
             print('Training complete!\nFor a more detailed explanation of these graphs, please refer to our report!')
             input('To restart, hit enter\n')            
