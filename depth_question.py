@@ -51,6 +51,7 @@ def graph_depth_accuracy(data):
     
 def plot_both(data):
     depths, accuracies, pruned_depths, pruned_accuracies = get_values(data)
+    plt.figure(figsize=[12,6])
     plt.subplot(1,2,1)
     plt.plot(np.arange(len(depths)), np.arange(len(depths)), alpha=0.2, color='blue')
     plt.scatter(depths, pruned_depths)
@@ -62,5 +63,5 @@ def plot_both(data):
     plt.ylabel('Accuracy')
     plt.xlabel('Tree depth')
     plt.legend()
-    plt.show(block=False)
+    plt.show()
     return
