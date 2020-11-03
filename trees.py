@@ -93,8 +93,7 @@ class binarySearchTree:
     def get_f1(self,data):
         pred=self.predict(data[:,:-1]) 
         cm=ev.confusion_matrix(data[:,-1],pred)
-        m=ev.avg_recall_precision(cm)
-        return ev.f1_score(m[0],m[1])
+        return ev.get_f1_scores(cm)
     
     def set_prune_status(self,pruned=False):
         
