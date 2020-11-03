@@ -112,3 +112,84 @@ def get_averages(results):
         'avg_class_rate': np.mean(np.array(class_rates)),
         'avg_class_rate_CI': np.std(np.array(class_rates), ddof=1) * 1.96 / np.sqrt(10)
     }
+
+
+def print_results(results):
+    metrics = get_averages(results)
+    return {
+        'Precision': metrics['precision'],
+        'Precision 95% CI': list(zip(metrics['precision'] - metrics['precision_CI'],
+                                     metrics['precision'] + metrics['precision_CI'])),
+        'Recall': metrics['recall'],
+        'Recall 95% CI': list(zip(metrics['recall'] - metrics['recall_CI'],
+                                  metrics['recall'] + metrics['recall_CI'])),
+        'F1 Score': metrics['recall'],
+        'F1 Score 95% CI': list(zip(metrics['f1_score'] - metrics['f1_score_CI'],
+                                    metrics['f1_score'] + metrics['f1_score_CI'])),
+        'Avg. Class. Rate': metrics['avg_class_rate'],
+        'Avg. Class. Rate 95% CI': (metrics['avg_class_rate'] - metrics['avg_class_rate_CI'],
+                                    metrics['avg_class_rate'] + metrics['avg_class_rate_CI'])
+    }
+
+
+def metrics_pruning_plot(data_clean, data_noisy):
+    '''
+    Performs CV and pruning on the data sets and plots the resulting metrics
+    '''
+    # Get results for both data sets
+    results_clean, results_clean_pruned = grow_binary_trees(data_clean, pruning=True)
+    results_noisy, results_noisy_pruned = grow_binary_trees(data_noisy, pruning=True)
+
+    # Get metrics and CIs
+    metrics_clean = get_averages(results_clean)
+    metrics_clean_pruned = get_averages(results_clean_pruned)
+    metrics_noisy = get_averages(results_noisy)
+    metrics_noisy_pruned = get_averages(results_noisy_pruned)
+
+    x = np.arange(4)  # the label locations
+    width = 0.35  # the width of the bars
+
+    fig, axs = plt.subplots(figsize=(8, 10), ncols=2, nrows=3)
+    for i, title in zip(range(3), ['precision', 'recall', 'f1_score']):
+        # Clean data plots:
+        axs[i][0].grid(True)
+        axs[i][0].set_ylim(0.5, 1.1)
+        rects1 = axs[i][0].bar(x=x - width / 2,
+                               height=metrics_clean[title],
+                               width=width,
+                               yerr=metrics_clean[title + '_CI'],
+                               label='Unpruned',
+                               zorder=3)
+        rects2 = axs[i][0].bar(x=x + width / 2,
+                               height=metrics_clean_pruned[title],
+                               width=width,
+                               yerr=metrics_clean_pruned[title + '_CI'],
+                               label='Pruned',
+                               zorder=3)
+        axs[i][0].set_xticks(np.arange(4))
+        axs[i][0].set_xticklabels([f'Room {i}' for i in range(1, 5)])
+        axs[i][0].set_title(title.capitalize() + 's', fontsize=13)
+
+        # Noisy data plots:
+        axs[i][1].grid(True)
+        axs[i][1].set_ylim(0.5, 1.1)
+        rects1 = axs[i][1].bar(x=x - width / 2,
+                               height=metrics_noisy[title],
+                               width=width,
+                               yerr=metrics_noisy[title + '_CI'],
+                               label='Unpruned',
+                               zorder=3)
+        rects2 = axs[i][1].bar(x=x + width / 2,
+                               height=metrics_noisy_pruned[title],
+                               width=width,
+                               yerr=metrics_noisy_pruned[title + '_CI'],
+                               label='Pruned',
+                               zorder=3)
+        axs[i][1].set_xticks(np.arange(4))
+        axs[i][1].set_xticklabels([f'Room {i}' for i in range(1, 5)])
+        axs[i][1].set_yticklabels([])
+        axs[i][1].set_title(title.capitalize() + 's', fontsize=13)
+    fig.text(x=0.28, y=1.005, s='Clean Data', ha='center', fontsize=16)
+    fig.text(x=0.755, y=1.005, s='Noisy Data', ha='center', fontsize=16)
+    axs[1][1].legend(loc='upper right')
+    plt.tight_layout()
