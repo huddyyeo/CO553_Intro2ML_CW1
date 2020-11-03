@@ -119,7 +119,7 @@ if __name__ == "__main__":
             print('\nPruned Results')
             print('-'*53+'\n')            
             for i in list(results_pruned.keys()):
-                print(i,results[i])
+                print(i,results_pruned[i])
             print('\n')
             input('To restart, hit enter\n')                
         
