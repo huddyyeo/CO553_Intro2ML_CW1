@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 import find_split as fs
 import evaluation as ev
 
