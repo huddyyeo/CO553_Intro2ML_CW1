@@ -3,66 +3,75 @@ import evaluation
 from trees import binarySearchTree
 
 
-def grow_binary_trees(data, stratified=False, pruning=False):
+def grow_binary_trees(data_input, stratified=False, pruning=False):
     '''
     Splits the data set into 10 folds and uses each fold as a testing set once.
-
-    If pruning: returns two dictionaries of results, for pruned and unpruned trees
+    Calculates metrics for each fold to get standard errors.
+    Data split - stratified or fully random. #TODO
     '''
 
     # Create 10 Folds: Group indices into 10 folds
+    data = data_input.copy()
     np.random.shuffle(data)
     data = data.reshape((10, -1, 8))
 
     if pruning:
         results, results_pruned = {}, {}
-        for i, fold in enumerate(data):
-            results[i] = {}
-            results_pruned[i] = {}
+        for i, test_fold in enumerate(data):
+            results[i] = np.zeros((4, 4))
+            results_pruned[i] = np.zeros((4, 4))
 
-            test_data = fold
             train_val_data = np.delete(data, i, axis=0)
-            pruning_data, train_data = train_val_data[0], np.vstack(train_val_data[1:])
 
-            tree = binarySearchTree(train_data)
+            for j, val_fold in enumerate(train_val_data):
 
-            results[i]['y_true'] = test_data[:, -1].astype(int)
-            results[i]['y_pred'] = tree.predict(test_data)
+                train_data = np.vstack(np.delete(train_val_data, j, axis=0))
 
-            tree.prune_tree(pruning_data)
+                tree = binarySearchTree(train_data)
 
-            results_pruned[i]['y_true'] = test_data[:, -1].astype(int)
-            results_pruned[i]['y_pred'] = tree.predict(test_data)
+                results[i] += get_confusion_matrix(test_fold[:, -1].astype(int),
+                                                   tree.predict(test_fold),
+                                                   normalised=True)
+
+                tree.prune_tree(val_fold)
+
+                results_pruned[i] += get_confusion_matrix(test_fold[:, -1].astype(int),
+                                                          tree.predict(test_fold),
+                                                          normalised=True)
+            results[i] /= 9
+            results_pruned[i] /= 9
 
         return results, results_pruned
 
     else:
         results = {}
-        for i, fold in enumerate(data):
-            results[i] = dict()
+        for i, test_fold in enumerate(data):
 
-            test_data = fold
             train_data = np.vstack(np.delete(data, i, axis=0))
 
             tree = binarySearchTree(train_data)
 
-            results[i]['y_true'] = test_data[:, -1].astype(int)
-            results[i]['y_pred'] = tree.predict(test_data)
+            results[i] = get_confusion_matrix(test_fold[:, -1].astype(int),
+                                              tree.predict(test_fold),
+                                              normalised=True)
 
         return results
 
 
-def get_confusion_matrix(y_true, y_pred):
+def get_confusion_matrix(y_true, y_pred, normalised=True):
     ret_matrix = np.zeros((4, 4))
-    for x, y in zip(y_pred, y_true):
+    for x, y in zip(y_true, y_pred):
         ret_matrix[x - 1][y - 1] += 1
 
-    return ret_matrix
+    if normalised:
+        return ret_matrix / np.sum(ret_matrix, axis=1).reshape(-1, 1)
+    else:
+        return ret_matrix
 
 def get_recalls_precisions(conf_matrix):
 
-    precisions = np.diagonal(conf_matrix) / np.sum(conf_matrix, axis=1)
-    recalls = np.diagonal(conf_matrix) / np.sum(conf_matrix, axis=0)
+    precisions = np.diagonal(conf_matrix) / np.sum(conf_matrix, axis=0)
+    recalls = np.diagonal(conf_matrix) / np.sum(conf_matrix, axis=1)
 
     return precisions, recalls
 
@@ -95,8 +104,7 @@ def get_averages(results):
     f1_scores = []
     class_rates = []
     for i in range(len(results)):
-        conf_matrix = get_confusion_matrix(results[i]['y_true'], results[i]['y_pred'])
-        prec, rec, f1, c_r = get_metrics(conf_matrix)
+        prec, rec, f1, c_r = get_metrics(results[i])
 
         precisions.append(prec)
         recalls.append(rec)
@@ -132,13 +140,10 @@ def print_results(results):
     }
 
 
-def metrics_pruning_plot(data_clean, data_noisy):
+def metrics_pruning_plot(results_clean, results_clean_pruned, results_noisy, results_noisy_pruned, savefile=False):
     '''
     Performs CV and pruning on the data sets and plots the resulting metrics
     '''
-    # Get results for both data sets
-    results_clean, results_clean_pruned = grow_binary_trees(data_clean, pruning=True)
-    results_noisy, results_noisy_pruned = grow_binary_trees(data_noisy, pruning=True)
 
     # Get metrics and CIs
     metrics_clean = get_averages(results_clean)
@@ -149,7 +154,7 @@ def metrics_pruning_plot(data_clean, data_noisy):
     x = np.arange(4)  # the label locations
     width = 0.35  # the width of the bars
 
-    fig, axs = plt.subplots(figsize=(8, 10), ncols=2, nrows=3)
+    fig, axs = plt.subplots(figsize=(8, 9), ncols=2, nrows=3)
     for i, title in zip(range(3), ['precision', 'recall', 'f1_score']):
         # Clean data plots:
         axs[i][0].grid(True)
@@ -167,8 +172,8 @@ def metrics_pruning_plot(data_clean, data_noisy):
                                label='Pruned',
                                zorder=3)
         axs[i][0].set_xticks(np.arange(4))
-        axs[i][0].set_xticklabels([f'Room {i}' for i in range(1, 5)])
-        axs[i][0].set_title(title.capitalize() + 's', fontsize=13)
+        axs[i][0].set_xticklabels([])
+        axs[i][0].set_ylabel(title.capitalize(), fontsize=13)
 
         # Noisy data plots:
         axs[i][1].grid(True)
@@ -186,10 +191,13 @@ def metrics_pruning_plot(data_clean, data_noisy):
                                label='Pruned',
                                zorder=3)
         axs[i][1].set_xticks(np.arange(4))
-        axs[i][1].set_xticklabels([f'Room {i}' for i in range(1, 5)])
+        axs[i][1].set_xticklabels([])
         axs[i][1].set_yticklabels([])
-        axs[i][1].set_title(title.capitalize() + 's', fontsize=13)
-    fig.text(x=0.28, y=1.005, s='Clean Data', ha='center', fontsize=16)
-    fig.text(x=0.755, y=1.005, s='Noisy Data', ha='center', fontsize=16)
+    axs[0][0].set_title('Clean Data', y=1.05, ha='center', fontsize=16)
+    axs[0][1].set_title('Noisy Data', y=1.05, ha='center', fontsize=16)
     axs[1][1].legend(loc='upper right')
-    plt.tight_layout()
+    axs[2][0].set_xticklabels([f'Room {i}' for i in range(1, 5)])
+    axs[2][1].set_xticklabels([f'Room {i}' for i in range(1, 5)])
+    plt.tight_layout(pad=0.5)
+    if savefile:
+        plt.savefig('pruned_unpruned.png', format='png')
