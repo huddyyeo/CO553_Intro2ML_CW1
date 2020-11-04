@@ -42,22 +42,22 @@ y_pred = [1, 1, 3, 4, 1, 2, 2, 4]
 #     return np.sum(np.diagonal(conf_matrix)) / np.sum(conf_matrix)
 
 
-# def get_metrics(y_true, y_pred, printout=False):
-#     y_pred=[int(i) for i in y_pred]
-#     y_true=[int(i) for i in y_true]
-#     conf_matrix = confusion_matrix(y_true, y_pred)
-#     precision, recall = get_recalls_precisions(conf_matrix)
-#     f1 = get_f1_scores(conf_matrix)
-#     accuracy = get_accuracy(y_true, y_pred)
+def get_metrics(y_true, y_pred, printout=False):
+    y_pred = [int(i) for i in y_pred]
+    y_true = [int(i) for i in y_true]
+    conf_matrix = confusion_matrix(y_true, y_pred)
+    precision, recall = get_recalls_precisions(conf_matrix)
+    f1 = get_f1_scores(conf_matrix)
+    accuracy = get_accuracy(y_true, y_pred)
 
-#     if printout:
-#         print('---RESULT METRICS---')
-#         print('Precisions:  ', precision)
-#         print('Recalls:     ', recall)
-#         print('F1 Score:    ', f1)
-#         print('Avg Accuracy:', accuracy)
+    if printout:
+        print('---RESULT METRICS---')
+        print('Precisions:  ', precision)
+        print('Recalls:     ', recall)
+        print('F1 Score:    ', f1)
+        print('Avg Accuracy:', accuracy)
 
-#     return precision, recall, f1, accuracy
+    return precision, recall, f1, accuracy
 
 
 def confusion_matrix(y_true, y_pred, normalised=True):
@@ -168,6 +168,7 @@ def plot_conf_matrix(confusion_matrix, title=None):
 
     for i in range(4):
         for j in range(4):
-            text = ax.text(i, j, int(confusion_matrix[i][j]),
-                           ha="center", va="center", color="w")
+            color = 'black' if i == j else 'w'
+            text = ax.text(i, j, np.round(confusion_matrix[i][j], 4),
+                           ha="center", va="center", color=color)
     plt.show()
