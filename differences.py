@@ -62,5 +62,6 @@ test = clean_removed_dataset[int(len(clean_removed_dataset) * split):]
 model = trees.binarySearchTree(train)
 print('Max depth is', model.get_max_depth())
 y_pred = model.predict(test[:, :-1])
-cm = ev.confusion_matrix(test[:, -1], y_pred, plot=True)
-i = ev.get_metrics(test[:, -1], y_pred, printout=True)
+cm = ev.confusion_matrix(test[:, -1], y_pred)
+i = ev.get_metrics(cm, printout=True)
+ev.plot_conf_matrix(cm)
