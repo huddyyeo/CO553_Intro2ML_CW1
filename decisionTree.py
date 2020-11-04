@@ -48,11 +48,12 @@ if __name__ == "__main__":
 
             y_pred = model.predict(test[:, :-1])
             ev.get_metrics(test[:, -1], y_pred, printout=True)
-            print('To continue, you may need to close the plot window first')
+            print('To continue, you may need to close the plot windows first')
             ev.confusion_matrix(test[:, -1], y_pred, plot=True)
+            print('Visualising the pruned trees')            
+            model.visualise_tree()
 
-            print('\n')
-            input('To restart, hit enter\n')
+            input('\nTo restart, hit enter\n')
 
         if model == '1':
             split = float(input('Enter training data split value, eg 0.7\n'))
@@ -81,8 +82,10 @@ if __name__ == "__main__":
             y_pred = model.predict(test[:, :-1])
             # evaluate
             ev.get_metrics(test[:, -1], y_pred, printout=True)
-            print('To continue, you may need to close the plot window first')
+            print('To continue, you may need to close the plot windows first')
             ev.confusion_matrix(test[:, -1], y_pred, plot=True, title='Unpruned')
+            print('Visualising the pruned trees')            
+            model.visualise_tree()            
 
             print('\nPruning...\n')
 
@@ -94,9 +97,10 @@ if __name__ == "__main__":
             ev.get_metrics(test[:, -1], y_pred, printout=True)
             print('To continue, you may need to close the plot window first')
             ev.confusion_matrix(test[:, -1], y_pred, plot=True, title='Pruned')
+            print('Visualising the pruned trees')
+            model.visualise_tree()            
 
-            print('\n')
-            input('To restart, hit enter\n')
+            input('\nTo restart, hit enter\n')
 
         if model == '2':
             print('Training 10 fold CV...')
@@ -106,8 +110,7 @@ if __name__ == "__main__":
             print('-' * 53 + '\n')
             for i in list(results.keys()):
                 print(i, results[i])
-            print('\n')
-            input('To restart, hit enter\n')
+            input('\nTo restart, hit enter\n')
 
         if model == '3':
             print('Training 10 fold CV and then pruning it...')
@@ -122,12 +125,11 @@ if __name__ == "__main__":
             print('-' * 53 + '\n')
             for i in list(results_pruned.keys()):
                 print(i, results_pruned[i])
-            print('\n')
-            input('To restart, hit enter\n')
+            input('\nTo restart, hit enter\n')
 
         if model == '4':
             print('Training...\n')
             print('To continue later, you may need to close the plot window first')
             dp.plot_both(data)
             print('Training complete!\nFor a more detailed explanation of these graphs, please refer to our report!')
-            input('To restart, hit enter\n')
+            input('\nTo restart, hit enter\n')
