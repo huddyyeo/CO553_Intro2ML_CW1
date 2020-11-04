@@ -43,16 +43,23 @@ df1 = pd.DataFrame(data[:, :-1])
 df2 = pd.DataFrame(data2[:, :-1])
 get_different_rows(df1, df2)
 
-
 # This returns the observations that have the same signal values but of different rooms.
 df1 = pd.DataFrame(data)
 df2 = pd.DataFrame(data2)
-diff_obs = get_different_rows(df1, df2)
-column_names = {x: "Emitter " + str(x) for x in range(7)}
-
-diff_obs.rename(columns={**column_names, **{7: 'Room'}})
-
+diff_obs = get_different_rows(df1, df2, which=None)
+diff_obs = diff_obs.sort_values(by=[0, 1, 2, 3, 4, 5, 6])
 
 # Training and testing a tree on the noisy dataset without those observations above
-pd.concat([df2, diff_obs, diff_obs]).drop_duplicates(keep=False)
-diff_obs = diff_obs.to_numpy()
+clean_removed = pd.concat([df2, diff_obs, diff_obs]).drop_duplicates(keep=False)
+clean_removed_dataset = clean_removed.to_numpy()
+
+np.random.shuffle(clean_removed_dataset)
+split = 0.7
+train = clean_removed_dataset[:int(len(clean_removed_dataset) * split)]
+test = clean_removed_dataset[int(len(clean_removed_dataset) * split):]
+
+model = trees.binarySearchTree(train)
+print('Max depth is', model.get_max_depth())
+y_pred = model.predict(test[:, :-1])
+cm = ev.confusion_matrix(test[:, -1], y_pred, plot=True)
+i = ev.get_metrics(test[:, -1], y_pred, printout=True)
