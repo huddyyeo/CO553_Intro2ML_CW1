@@ -2,7 +2,10 @@ import numpy as np
 
 
 def find_split(data):
-
+    """
+    returns the optimal router/split point combination, based on the maximum
+    information gain, along with the split dataset.
+    """
     ret = {"router": None, "split_point": None, "entropy": get_entropy(data[:, 7])}
 
     # Create array of unique datapoints
@@ -29,7 +32,9 @@ def find_split(data):
 
 
 def split_data(data, feature, split_point):
-
+    """
+    Splits the data based on a given feature and split point
+    """
     data_l = data[data[:, feature - 1] < split_point]
     data_r = data[data[:, feature - 1] >= split_point]
 
@@ -37,11 +42,11 @@ def split_data(data, feature, split_point):
 
 
 def get_entropy(*labels):
-    '''
+    """
     Calculates the entropy for the given set (or subsets)
     -------
     *labels: list(s), list(s) of labels
-    '''
+    """
     entropies = [] #list of entropy values from each subset
     total = 0      #total number of datapoints
     for subset in labels:

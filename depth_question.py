@@ -4,7 +4,12 @@ import evaluation as ev
 import matplotlib.pyplot as plt
 from trees import binarySearchTree
 
+
 def get_values(data):
+    """
+    For each given depth, calculate the maximum depth
+    and accuracies of the unpruned and pruned tree
+    """
     np.random.shuffle(data)
     t_split = 0.8
     v_split = 0.9
@@ -32,7 +37,11 @@ def get_values(data):
         pruned_accuracies.append(ev.get_accuracy(y_true2, y_pred2))
     return depths, accuracies, pruned_depths, pruned_accuracies
 
+
 def graph_depths(data):
+    """
+    Graphs the relationship between the depths of pre-pruned and pruned trees
+    """
     depths, _, pruned_depths, _ = get_values(data)
     plt.plot(np.arange(len(depths)), np.arange(len(depths)), alpha=0.2, color='blue')
     plt.scatter(depths, pruned_depths)
@@ -40,7 +49,11 @@ def graph_depths(data):
     plt.xlabel('Tree depths before pruning')
     plt.show()
 
+
 def graph_depth_accuracy(data):
+    """
+    Graph the relationship between the accuracy and the depth of the tree
+    """
     depths, accuracies, pruned_depths, pruned_accuracies = get_values(data)
     plt.plot(depths, accuracies, color='b', label='unpruned tree')
     plt.plot(pruned_depths, pruned_accuracies, color='orange', label='pruned tree')
@@ -48,8 +61,14 @@ def graph_depth_accuracy(data):
     plt.xlabel('tree depth')
     plt.legend()
     plt.show()
-    
+
+
 def plot_both(data):
+    """
+    Creates plots measuring the:
+    1) relationship between unpruned and pruned tree depths
+    2) relationship between accuracy and tree depths for both trees
+    """
     depths, accuracies, pruned_depths, pruned_accuracies = get_values(data)
     plt.figure(figsize=[12,6])
     plt.subplot(1,2,1)

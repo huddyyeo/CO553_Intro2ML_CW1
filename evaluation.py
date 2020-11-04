@@ -5,7 +5,11 @@ y_true = [1,2,3,4,1,2,3,4]
 y_pred = [1,1,3,4,1,2,2,4]
 
 
-def confusion_matrix(y_true, y_pred,plot=False,title=None):
+def confusion_matrix(y_true, y_pred, plot=False, title=None):
+    """
+    Given the true and predicted values, returns the confusion matrix, and a
+    plot if indicated
+    """
     confusion_matrix = np.zeros((4, 4))
     if type(y_true[0])!= int:
         y_true = [int(x) for x in y_true.tolist()]
@@ -13,7 +17,6 @@ def confusion_matrix(y_true, y_pred,plot=False,title=None):
         y_pred = [int(x) for x in y_pred.tolist()]
     for x, y in zip(y_pred, y_true):
         confusion_matrix[x - 1][y - 1] += 1
-
 
     if plot==True:
         fig, ax = plt.subplots(1,1)
@@ -50,7 +53,9 @@ def confusion_matrix(y_true, y_pred,plot=False,title=None):
     return sum(recall.values())/N, sum(precision.values()) / N
 """
 def get_recalls_precisions(conf_matrix):
-
+    """
+    Using the confusion matrix to calculate the precisions and recalls of each class
+    """
     precisions = np.diagonal(conf_matrix) / np.sum(conf_matrix, axis=1)
     recalls = np.diagonal(conf_matrix) / np.sum(conf_matrix, axis=0)
 
@@ -63,18 +68,28 @@ def get_recalls_precisions(conf_matrix):
     return true_pred/np.sum(confusion_matrix)"""
 
 def get_f1_scores(conf_matrix):
+    """
+    Using the confusion matrix to calculate the F1 scores of each class
+    """
     precisions, recalls = get_recalls_precisions(conf_matrix)
 
     return 2 * (precisions * recalls) / (precisions + recalls)
 
 
 def get_accuracy(y_true, y_pred):
+    """
+    Using the true and predicted values to calculate the accuracy across all classes
+    """
     conf_matrix = confusion_matrix(y_true, y_pred)
 
     return np.sum(np.diagonal(conf_matrix)) / np.sum(conf_matrix)
 
 
 def get_metrics(y_true, y_pred, printout=False):
+    """
+    Using the predicted and true values, to return all measures
+    including accuracy, precision, recall, and F1 across each class
+    """
     y_pred=[int(i) for i in y_pred]
     y_true=[int(i) for i in y_true]
     conf_matrix = confusion_matrix(y_true, y_pred)

@@ -43,6 +43,9 @@ class binarySearchTree:
             self.right_child = binarySearchTree(r_data, self.depth, limit=limit)
 
     def get_max_depth(self):
+        """
+        returns the maximum depth of the tree
+        """
         # search each branch recursively and get max depth
         max_depth = [self.depth]
         if self.left_child:
@@ -52,6 +55,7 @@ class binarySearchTree:
         return max(max_depth)
 
     def prune_1_node(self, current_path=['parent']):
+
         if self.label:
             return
 
@@ -88,6 +92,9 @@ class binarySearchTree:
         return True
 
     def get_f1(self, data):
+        """
+        Calculates the F1 score
+        """
         pred = self.predict(data[:, :-1])
         cm = ev.confusion_matrix(data[:, -1], pred)
         return ev.get_f1_scores(cm)
@@ -170,6 +177,9 @@ class binarySearchTree:
         return objects
 
     def visualise_tree(self):
+        """
+        Creates a visualisation of the tree
+        """
         paths = self.get_paths()
         bbox_node = {'boxstyle': "round", 'ec': 'black', 'fc': 'lightgrey'}
         bbox_label = {'boxstyle': "round", 'ec': 'black', 'fc': 'lightblue'}
