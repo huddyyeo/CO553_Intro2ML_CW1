@@ -29,15 +29,15 @@ def grow_binary_trees(data_input, stratified=False, pruning=False):
 
                 tree = binarySearchTree(train_data)
 
-                results[i] += ev.get_confusion_matrix(test_fold[:, -1].astype(int),
-                                                      tree.predict(test_fold),
-                                                      normalised=True)
+                results[i] += ev.confusion_matrix(test_fold[:, -1].astype(int),
+                                                  tree.predict(test_fold),
+                                                  normalised=True)
 
                 tree.prune_tree(val_fold)
 
-                results_pruned[i] += ev.get_confusion_matrix(test_fold[:, -1].astype(int),
-                                                             tree.predict(test_fold),
-                                                             normalised=True)
+                results_pruned[i] += ev.confusion_matrix(test_fold[:, -1].astype(int),
+                                                         tree.predict(test_fold),
+                                                         normalised=True)
             results[i] /= 9
             results_pruned[i] /= 9
 
@@ -51,9 +51,9 @@ def grow_binary_trees(data_input, stratified=False, pruning=False):
 
             tree = binarySearchTree(train_data)
 
-            results[i] = ev.get_confusion_matrix(test_fold[:, -1].astype(int),
-                                                 tree.predict(test_fold),
-                                                 normalised=True)
+            results[i] = ev.confusion_matrix(test_fold[:, -1].astype(int),
+                                             tree.predict(test_fold),
+                                             normalised=True)
 
         return results
 

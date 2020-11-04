@@ -60,7 +60,7 @@ y_pred = [1, 1, 3, 4, 1, 2, 2, 4]
 #     return precision, recall, f1, accuracy
 
 
-def get_confusion_matrix(y_true, y_pred, normalised=True):
+def confusion_matrix(y_true, y_pred, normalised=True):
     ret_matrix = np.zeros((4, 4))
     for x, y in zip(y_true, y_pred):
         ret_matrix[x - 1][y - 1] += 1
