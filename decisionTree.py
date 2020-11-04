@@ -48,9 +48,10 @@ if __name__ == "__main__":
             print('Max depth of tree is', model.get_max_depth())
 
             y_pred = model.predict(test[:, :-1])
-            ev.get_metrics(test[:, -1], y_pred, printout=True)
+            cm=ev.confusion_matrix(test[:,-1],y_pred)
+            i=ev.get_metrics(cm,printout=True)
             print('To continue, you may need to close the plot windows first')
-            ev.confusion_matrix(test[:, -1], y_pred, plot=True)
+            ev.plot_conf_matrix(cm)
             print('Visualising the pruned trees')            
             model.visualise_tree()
 
@@ -82,10 +83,12 @@ if __name__ == "__main__":
             print('Max depth of tree before pruning:', model.get_max_depth())
             y_pred = model.predict(test[:, :-1])
             # evaluate
-            ev.get_metrics(test[:, -1], y_pred, printout=True)
-            print('To continue, you may need to close the plot windows first')
-            ev.confusion_matrix(test[:, -1], y_pred, plot=True, title='Unpruned')
-            print('Visualising the pruned trees')            
+            
+            cm=ev.confusion_matrix(test[:,-1],y_pred)
+            i=ev.get_metrics(cm,printout=True)    
+            print('To continue, you may need to close the plot windows first')            
+            ev.plot_conf_matrix(cm,title='Unpruned')
+            print('Visualising the unpruned trees')            
             model.visualise_tree()            
 
             print('\nPruning...\n')
@@ -95,9 +98,10 @@ if __name__ == "__main__":
             y_pred = model.predict(test[:, :-1])
 
             # evaluate
-            ev.get_metrics(test[:, -1], y_pred, printout=True)
-            print('To continue, you may need to close the plot window first')
-            ev.confusion_matrix(test[:, -1], y_pred, plot=True, title='Pruned')
+            cm=ev.confusion_matrix(test[:,-1],y_pred)
+            i=ev.get_metrics(cm,printout=True)    
+            print('To continue, you may need to close the plot windows first')            
+            ev.plot_conf_matrix(cm,title='Pruned')
             print('Visualising the pruned trees')
             model.visualise_tree()            
 
@@ -106,26 +110,29 @@ if __name__ == "__main__":
         if model == '3':
             print('Training 10 fold CV...')
             results = cv.grow_binary_trees(data)
-            results = cv.print_results(results)
             print('Results')
             print('-' * 53 + '\n')
-            for i in list(results.keys()):
-                print(i, results[i])
+            r=ev.print_results(results)
+            for i in r.keys():
+                print(i)
+                print(np.round(r[i],4))            
             input('\nTo restart, hit enter\n')
 
         if model == '4':
             print('Training 10 fold CV and then pruning it...')
             results, results_pruned = cv.grow_binary_trees(data, pruning=True)
-            results = cv.print_results(results)
-            results_pruned = cv.get_averages(results_pruned)
             print('\nUnpruned Results')
             print('-' * 53 + '\n')
-            for i in list(results.keys()):
-                print(i, results[i])
+            r=ev.print_results(results)
+            for i in r.keys():
+                print(i)
+                print(np.round(r[i],4)) 
             print('\nPruned Results')
             print('-' * 53 + '\n')
-            for i in list(results_pruned.keys()):
-                print(i, results_pruned[i])
+            r=ev.print_results(results_pruned)
+            for i in r.keys():
+                print(i)
+                print(np.round(r[i],4)) 
             input('\nTo restart, hit enter\n')
 
         if model == '5':

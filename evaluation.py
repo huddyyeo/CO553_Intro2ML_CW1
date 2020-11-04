@@ -4,65 +4,10 @@ import matplotlib.pyplot as plt
 y_true = [1, 2, 3, 4, 1, 2, 3, 4]
 y_pred = [1, 1, 3, 4, 1, 2, 2, 4]
 
-
-"""def avg_recall_precision(confusion_matrix):
-    N = len(confusion_matrix)
-
-    recall = {}
-    precision = {}
-    for
-    for room in range(N):
-        true_pos = confusion_matrix[room][room]
-        recall[room] = true_pos / sum(confusion_matrix[:][room])
-        precision[room] = true_pos / sum(confusion_matrix[room][:])
-    return sum(recall.values())/N, sum(precision.values()) / N
-"""
-# def get_recalls_precisions(conf_matrix):
-
-#     precisions = np.diagonal(conf_matrix) / np.sum(conf_matrix, axis=1)
-#     recalls = np.diagonal(conf_matrix) / np.sum(conf_matrix, axis=0)
-
-#     return precisions, recalls
-
-# """def avg_classification_rate(confusion_matrix):
-#     true_pred = 0
-#     for i in range(len(confusion_matrix)):
-#         true_pred += confusion_matrix[i][i]
-#     return true_pred/np.sum(confusion_matrix)"""
-
-# def get_f1_scores(conf_matrix):
-#     precisions, recalls = get_recalls_precisions(conf_matrix)
-
-#     return 2 * (precisions * recalls) / (precisions + recalls)
-
-
-# def get_accuracy(y_true, y_pred):
-#     conf_matrix = confusion_matrix(y_true, y_pred)
-
-#     return np.sum(np.diagonal(conf_matrix)) / np.sum(conf_matrix)
-
-
-def get_metrics(y_true, y_pred, printout=False):
-    y_pred = [int(i) for i in y_pred]
-    y_true = [int(i) for i in y_true]
-    conf_matrix = confusion_matrix(y_true, y_pred)
-    precision, recall = get_recalls_precisions(conf_matrix)
-    f1 = get_f1_scores(conf_matrix)
-    accuracy = get_accuracy(y_true, y_pred)
-
-    if printout:
-        print('---RESULT METRICS---')
-        print('Precisions:  ', precision)
-        print('Recalls:     ', recall)
-        print('F1 Score:    ', f1)
-        print('Avg Accuracy:', accuracy)
-
-    return precision, recall, f1, accuracy
-
-
 def confusion_matrix(y_true, y_pred, normalised=True):
-    y_true = y_true.astype(int)
-    y_pred = y_pred.astype(int)
+
+    y_true=[int(i) for i in y_true]
+    y_pred=[int(i) for i in y_pred]    
 
     ret_matrix = np.zeros((4, 4))
     for x, y in zip(y_true, y_pred):
@@ -90,11 +35,18 @@ def get_class_rate(conf_matrix):
 
     return np.sum(np.diagonal(conf_matrix)) / np.sum(conf_matrix)
 
-def get_metrics(conf_matrix):
+
+def get_metrics(conf_matrix,printout=False):
 
     precision, recall = get_recalls_precisions(conf_matrix)
     f1 = get_f1_scores(conf_matrix)
     class_rate = get_class_rate(conf_matrix)
+    if printout:
+        print('---RESULT METRICS---')
+        print('Precisions:  ', precision)
+        print('Recalls:     ', recall)
+        print('F1 Score:    ', f1)
+        print('Avg Accuracy:', class_rate)
 
     return precision, recall, f1, class_rate
 

@@ -22,14 +22,16 @@ def get_values(data):
         y_pred = [x.item() for x in model.predict(test[:, :-1])]
         y_true = [int(val.item()) for val in test[:, -1]]
         depths.append(depth)
-        accuracies.append(ev.get_accuracy(y_true, y_pred))
+        cm=ev.confusion_matrix(y_true, y_pred)
+        accuracies.append(ev.get_class_rate(cm))
 
         model.prune_tree(validation)
         depth2 = model.get_max_depth()
         y_pred2 = [x.item() for x in model.predict(test[:, :-1])]
         y_true2 = [int(val.item()) for val in test[:, -1]]
         pruned_depths.append(depth2)
-        pruned_accuracies.append(ev.get_accuracy(y_true2, y_pred2))
+        cm2=ev.confusion_matrix(y_true2, y_pred2)
+        pruned_accuracies.append(ev.get_class_rate(cm2))                         
     return depths, accuracies, pruned_depths, pruned_accuracies
 
 def graph_depths(data):
