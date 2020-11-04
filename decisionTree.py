@@ -1,4 +1,3 @@
-import argparse
 import numpy as np
 import find_split as fs
 import evaluation as ev

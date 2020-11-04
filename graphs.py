@@ -1,6 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+"""
+Plots a histogram for each emitters, coloured by the rooms
+"""
+
 data = np.loadtxt('clean_dataset.txt')
 fig, ax = plt.subplots(2, 7, sharex='col', sharey='row')
 for i in range(7):
