@@ -50,7 +50,7 @@ diff_obs = get_different_rows(df1, df2, which=None)
 diff_obs = diff_obs.sort_values(by=[0, 1, 2, 3, 4, 5, 6])
 
 # Training and testing a tree on the noisy dataset without those observations above
-# Results in around a 97% accuracy
+# Results in a 97% accuracy
 clean_removed = pd.concat([df2, diff_obs, diff_obs]).drop_duplicates(keep=False)
 clean_removed_dataset = clean_removed.to_numpy()
 
