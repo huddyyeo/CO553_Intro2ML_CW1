@@ -14,6 +14,7 @@ if __name__ == "__main__":
         print('-' * 53)
         print('Decision Tree training code for Intro2ML coursework 1')
         print('-' * 53)
+        print('\nA detailed explanation of the code can be found in our readme file\n')
         while True:
             path = input('\nInput path to dataset\n')
             try:
@@ -23,9 +24,9 @@ if __name__ == "__main__":
                 print('Path not valid! Try again')
 
         print('Please select model\n')
-        model = input('0 for DT, 1 for DT + pruning, 2 CV + DT, 3 CV + DT + pruning, 4 depth question\n')
+        model = input('1 for DT, 2 for DT + pruning, 3 for CV + DT, 4 for CV + DT + pruning, 5 for depth evaluation\n')
         # cases for each model
-        if model == '0':
+        if model == '1':
             while True:
                 split = float(input('Enter training data split value, eg 0.7\n'))
                 if split < 0 or split > 1:
@@ -55,7 +56,7 @@ if __name__ == "__main__":
 
             input('\nTo restart, hit enter\n')
 
-        if model == '1':
+        if model == '2':
             split = float(input('Enter training data split value, eg 0.7\n'))
             while True:
                 if split < 0 or split > 1:
@@ -102,7 +103,7 @@ if __name__ == "__main__":
 
             input('\nTo restart, hit enter\n')
 
-        if model == '2':
+        if model == '3':
             print('Training 10 fold CV...')
             results = cv.grow_binary_trees(data)
             results = cv.print_results(results)
@@ -112,7 +113,7 @@ if __name__ == "__main__":
                 print(i, results[i])
             input('\nTo restart, hit enter\n')
 
-        if model == '3':
+        if model == '4':
             print('Training 10 fold CV and then pruning it...')
             results, results_pruned = cv.grow_binary_trees(data, pruning=True)
             results = cv.print_results(results)
@@ -127,7 +128,7 @@ if __name__ == "__main__":
                 print(i, results_pruned[i])
             input('\nTo restart, hit enter\n')
 
-        if model == '4':
+        if model == '5':
             print('Training...\n')
             print('To continue later, you may need to close the plot window first')
             dp.plot_both(data)
