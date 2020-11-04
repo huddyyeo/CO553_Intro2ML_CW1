@@ -42,17 +42,20 @@ def get_different_rows(source_df, new_df, which=None):
     return diff_df.drop('_merge', axis=1)
 
 
-# This takes only the signal values, and returns an empty dataframe,
-# which implies that the observations are exactly the same across both datasets.
-
 def check_observations_only(data1, data2):
+    """
+    This takes only the signal values, and returns an empty dataframe,
+    which implies that the observations are exactly the same across both datasets.
+    """
     df1 = pd.DataFrame(data1[:, :-1])
     df2 = pd.DataFrame(data2[:, :-1])
     return get_different_rows(df1, df2)
 
 
-# This returns the observations that have the same signal values but of different rooms.
 def check_signals_only(data1, data2):
+    """
+    This returns the observations that have the same signal values but of different rooms.
+    """
     df1 = pd.DataFrame(data1)
     df2 = pd.DataFrame(data2)
     diff_obs = get_different_rows(df1, df2, which=None)
@@ -60,9 +63,11 @@ def check_signals_only(data1, data2):
     return diff_obs
 
 
-# Training and testing a tree on the noisy dataset without those observations above
-# Results in a 97% accuracy
 def new_model(data1, data2):
+    """
+    Training and testing a tree on the noisy dataset without those observations above
+    Results in a 97% accuracy
+    """
     diff_obs = check_signals_only(data1, data2)
     df2 = pd.DataFrame(data2)
     clean_removed = pd.concat([df2, diff_obs, diff_obs]).drop_duplicates(keep=False)
