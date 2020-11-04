@@ -2,7 +2,7 @@
 
 ##Coursework 1
 
-by Hudson Yeo, Choi Ling Yu, Monika Jotautaite and Grzegorz Sarapata
+by Hudson Yeo, Ling Yu Choi, Monika Jotautaite and Grzegorz Sarapata
 
 ## Running the code
 
