@@ -61,6 +61,9 @@ y_pred = [1, 1, 3, 4, 1, 2, 2, 4]
 
 
 def confusion_matrix(y_true, y_pred, normalised=True):
+    y_true = y_true.astype(int)
+    y_pred = y_pred.astype(int)
+
     ret_matrix = np.zeros((4, 4))
     for x, y in zip(y_true, y_pred):
         ret_matrix[x - 1][y - 1] += 1
