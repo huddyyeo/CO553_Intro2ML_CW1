@@ -1,6 +1,4 @@
-# Introduction to Machine Learning
-
-##Coursework 1
+# Introduction to Machine Learning Coursework 1
 
 by Hudson Yeo, Ling Yu Choi, Monika Jotautaite and Grzegorz Sarapata
 
@@ -91,11 +89,11 @@ cv.metrics_pruning_plot(results_clean, results_clean_pruned, results_noisy, resu
 
 ### Depth analysis
 
-Import depth_question.py as dp and use:
+Import depth_question.py as dp and use
 ```
 dp.plot_both(data) #plots the diagrams seen in the report
 ```
-There are several other functions which are:
+There are several other functions which are
 ```
 dp.get_values(data) #runs tree 20 times, with increasing depth limit and returns depths, accuracies, pruned_depths and pruned_accuracies
 dp.graph_depths(data) #runs tree 20 times and plots depth changes before and after pruning
