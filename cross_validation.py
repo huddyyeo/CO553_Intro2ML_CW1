@@ -1,5 +1,5 @@
 import numpy as np
-import evaluation
+import evaluation as ev
 from trees import binarySearchTree
 
 
@@ -29,15 +29,15 @@ def grow_binary_trees(data_input, stratified=False, pruning=False):
 
                 tree = binarySearchTree(train_data)
 
-                results[i] += get_confusion_matrix(test_fold[:, -1].astype(int),
-                                                   tree.predict(test_fold),
-                                                   normalised=True)
+                results[i] += ev.get_confusion_matrix(test_fold[:, -1].astype(int),
+                                                      tree.predict(test_fold),
+                                                      normalised=True)
 
                 tree.prune_tree(val_fold)
 
-                results_pruned[i] += get_confusion_matrix(test_fold[:, -1].astype(int),
-                                                          tree.predict(test_fold),
-                                                          normalised=True)
+                results_pruned[i] += ev.get_confusion_matrix(test_fold[:, -1].astype(int),
+                                                             tree.predict(test_fold),
+                                                             normalised=True)
             results[i] /= 9
             results_pruned[i] /= 9
 
@@ -51,9 +51,9 @@ def grow_binary_trees(data_input, stratified=False, pruning=False):
 
             tree = binarySearchTree(train_data)
 
-            results[i] = get_confusion_matrix(test_fold[:, -1].astype(int),
-                                              tree.predict(test_fold),
-                                              normalised=True)
+            results[i] = ev.get_confusion_matrix(test_fold[:, -1].astype(int),
+                                                 tree.predict(test_fold),
+                                                 normalised=True)
 
         return results
 
@@ -146,10 +146,10 @@ def metrics_pruning_plot(results_clean, results_clean_pruned, results_noisy, res
     '''
 
     # Get metrics and CIs
-    metrics_clean = get_averages(results_clean)
-    metrics_clean_pruned = get_averages(results_clean_pruned)
-    metrics_noisy = get_averages(results_noisy)
-    metrics_noisy_pruned = get_averages(results_noisy_pruned)
+    metrics_clean = ev.get_averages(results_clean)
+    metrics_clean_pruned = ev.get_averages(results_clean_pruned)
+    metrics_noisy = ev.get_averages(results_noisy)
+    metrics_noisy_pruned = ev.get_averages(results_noisy_pruned)
 
     x = np.arange(4)  # the label locations
     width = 0.35  # the width of the bars
