@@ -8,17 +8,17 @@ Download all py files and place them in the same folder.
 
 ### Main 
 
-For a quick overview, please run decisionTree.py
+For a quick overview, please run *decisionTree.py*.
 This file contains all the other codes and will help you evaluate your dataset with the model of your choice.
-When running the file, you will be asked to input a path to your dataset.
-Then you will be asked to select the model you want.
+When running the file, you will be asked to input a path to your dataset. For example, if the files are in the same folder, please type in *noisy_dataset.txt*.
+Then you will be asked to select the model you want, by typing in a single integer value.
 Please input: 
 
-1) 1, if you would like to run a decision tree only.
-2) 2, if you would like to run a decision tree with pruning
-3) 3, if you would like to run cross validation
-4) 4, if you would like to run cross validation and pruning
-5) 5, if you would like to run the code for the depth evaluation (depth question)
+- 1, if you would like to run a decision tree only.
+- 2, if you would like to run a decision tree with pruning
+- 3, if you would like to run cross validation
+- 4, if you would like to run cross validation and pruning
+ - 5, if you would like to run the code graphing the relation between tree depth and accuracy (depth question)
 
 In case 1 and 2, you will be asked to input a value for the train/test split (from 0 to 1) as well as depth limit if you want. If you do not want a depth limit for the tree, please do hit enter without typing anything. For model 2, the original test set will be equally divided into 2, one for pruning and one for testing. ie, if you enter a train/test split of 0.8, it will prune on 10% and test on the other 10% of the dataset.
 
@@ -113,3 +113,4 @@ diff.check_observations_only(clean_data, noisy_data)) # returns the different ro
 diff.check_signals_only(clean_data, noisy_data) # returns the different rows (excluding last column) in the two datasets
 diff.new_model(clean_data, noisy_data) # returns the performance metrics of the noisy dataset with rows from the above command removed
 ```
+
