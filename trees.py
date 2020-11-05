@@ -165,22 +165,24 @@ class binarySearchTree:
         else:
             return self.predict_one(data).flatten()
 
-    def get_paths(self, path=['root'], objects=[]):
+    def get_paths(self, path=['root'], branches=[]):
         if self.label != None:
-            objects.append((path, f'Room {int(self.label)}'))
+            branches.append((path, f'Room {int(self.label)}'))
         else:
-            objects.append((path, f'Router {self.split_router}\nX = {self.split_value}'))
+            branches.append((path, f'Router {self.split_router}\nX = {self.split_value}'))
             l_path = path + ['l']
             r_path = path + ['r']
-            self.left_child.get_paths(l_path, objects)
-            self.right_child.get_paths(r_path, objects)
-        return objects
+            self.left_child.get_paths(l_path, branches)
+            self.right_child.get_paths(r_path, branches)
+        return branches
 
     def visualise_tree(self):
         """
         Creates a visualisation of the tree
         """
-        paths = self.get_paths()
+        plt.clf()
+        paths=[]
+        paths = self.get_paths(branches=paths)
         bbox_node = {'boxstyle': "round", 'ec': 'black', 'fc': 'lightgrey'}
         bbox_label = {'boxstyle': "round", 'ec': 'black', 'fc': 'lightblue'}
         fig, ax = plt.subplots(figsize=(15, 8))
