@@ -105,10 +105,7 @@ dp.graph_depth_accuracy(data) #runs tree 20 times and plots accuracy against tre
 Import differences.py as diff and use
 ```
 diff.check_data_count(clean_data, noisy_data) # checks the data count
-```
-There are several other functions which are
-```
-diff.labels(clean_data, noisy_data) # returns the count of rooms
+diff.labels(clean_data, noisy_data) # returns the count of each room
 diff.check_observations_only(clean_data, noisy_data)) # returns the different rows in the two datasets
 diff.check_signals_only(clean_data, noisy_data) # returns the different rows (excluding last column) in the two datasets
 diff.new_model(clean_data, noisy_data) # returns the performance metrics of the noisy dataset with rows from the above command removed
